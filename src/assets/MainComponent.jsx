@@ -18,8 +18,6 @@ function MainComponent() {
   const [taskDueDate, setTaskDueDate] = useState("");
   const [isTaskUploading, setIsTaskUploading] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-  const TASKS_COLLECTION_REF = collection(db, "tasks");
-  const EMPLOYEES_COLLECTION_REF = collection(db, "employees");
   const [employees, setEmployees] = useState([]);
   const [employeesName, setEmployeesName] = useState("");
   const [employeesEmail, setEmployeesEmail] = useState("");
@@ -28,6 +26,8 @@ function MainComponent() {
   const [employeesMontlySalary, setEmployeesMontlySalary] = useState("");
   const [isEmployeesUploading, setIsEmployeesUploading] = useState(false);
   const [topEmployees, setTopEmployees] = useState([]);
+  const TASKS_COLLECTION_REF = collection(db, "tasks");
+  const EMPLOYEES_COLLECTION_REF = collection(db, "employees");
 
   const deleteEmployee = async (id) => {
     await deleteDoc(doc(db, "employees", id));
@@ -183,7 +183,7 @@ function MainComponent() {
 
             <button onClick={() => setIsEmployeesUploading(true)}>send</button>
           </div>
-          <div className="flex justify-start  items-start ">
+          <div className="flex justify-start  items-start gap-10">
             <p>Tasks:</p>
             <input
               type="text"
@@ -217,55 +217,28 @@ function MainComponent() {
           </div>
         </div>
       </div>
-      {employees.map((employees) => (
-        <div
-          key={employees.id}
-          className="flex flex-row items-start  h-[2em] w-[80em] gap-2 border-[1px] border-black"
-        >
-          <p className="min-w-5 ">{employees.name}</p>
-          <p>{employees.email}</p>
-          <p>{employees.phone_number}</p>
-          <p>{employees.date_of_birth}</p>
-          <p>{employees.montly_salary}</p>
-          <div className="flex items-center gap-3">
-            <button onClick={() => deleteEmployee(employees.id)}>
-              Delete Employee
-            </button>
-          </div>
-        </div>
-      ))}
+     
       {tasks.map((task) => (
-        <div
-          key={task.id}
-          className="flex flex-row items-start h-[12em] w-[80em] border-[1px] border-black"
-        >
+        <div key={task.id} className="flex flex-row gap-5 ">
           <p>{task.title}</p>
           <p>{task.description}</p>
           <p>{task.due_date}</p>
           <button onClick={() => deleteTask(task.id)}>Delete Task</button>
           <button onClick={() => handleTaskUpdate(task.id)}>Update</button>
-          <div key={employees.id} className="flex flex-row gap-2">
-            <p>Assigned To:</p>
-            {employees.map((employee) => {
-              if (employee.id === task.id) {
-                return (
-                  <div key={employee.id} className="flex items-center gap-3">
-                    <p>{employee.name}</p>
-                    <p>{employee.email}</p>
-                    <p>{employee.phone_number}</p>
-                    <p>{employee.date_of_birth}</p>
-                    <p>{employee.monthly_salary}</p>
-                    <button onClick={() => deleteEmployee(employee.id)}>
-                      Delete Employee
-                    </button>
-                  </div>
-                );
-              } else {
-                return null;
-              }
-            })}
+          <p>Assigned To:</p>
+          {employees.map((employees) => (
+            <div className="flex flex-row gap-8">
+          <p>{employees.name}</p>
+          <p>{employees.email}</p>
+          <p>{employees.phone_number}</p>
+          <p>{employees.date_of_birth}</p>
+          <p>{employees.montly_salary}</p>
+          <button onClick={() => deleteEmployee(employees.id)}>
+            Delete Employee
+          </button>
           </div>
-        </div>
+            )  )
+          }</div>
       ))}
     </div>
   );
